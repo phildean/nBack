@@ -1,0 +1,14 @@
+trial{
+   trial_duration = 1000;
+   all_responses = false;
+   stimulus_event {
+		picture {
+				text $stext; 
+				x = 0; y = 100;
+		}$prepic;
+		deltat = 25;
+		duration = 1000;
+		code = $scode; 
+	} $PreIntroEvent;	
+   
+}$IntroName;

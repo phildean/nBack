@@ -1,0 +1,33 @@
+trial {
+	trial_duration = 3000;
+	all_responses = false;
+	
+		picture {
+			text $info;
+			x = 0; y = 150;
+		};
+		time = 0;
+		duration = 100;
+	
+	stimulus_event {
+		picture {
+			text one;
+			x = 0; y = 0;
+			text $info;
+			x = 0; y = 150;
+		} $pic;
+		time = 100;
+		duration = 500;
+		target_button = 1;
+				
+      port_code = $trialportcode;
+   } $event;
+	
+		picture {
+			text $info;
+			x = 0; y = 150;
+		};
+		time = 600;
+		duration = 2400;
+		
+} $main_trial;
