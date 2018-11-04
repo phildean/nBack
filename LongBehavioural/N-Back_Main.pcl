@@ -1,0 +1,439 @@
+# Constants
+int BLOCK_COUNT = 12;
+int stimulus_count = 60;
+int number_repetitions = 3;
+int number_block_type = 4;
+
+# Variable
+int num_correct;
+#int num_incorrect;
+
+# Randomisation
+sub
+	int random_exclude( int first, int last, int exclude )
+begin
+	int rval = random( first, last - 1 );
+	if (rval >= exclude) then
+		rval = rval + 1
+	end;
+	return rval
+end;
+
+###############Filling In the array with 20/60 targets
+
+# 0-back
+array<int> is_target_0[stimulus_count];
+loop int i = 1 until i > stimulus_count / 3 begin
+   is_target_0[i] = 1;
+   i = i + 1
+end;
+is_target_0.shuffle();
+loop until is_target_0[1] == 0 begin
+   is_target_0.shuffle()
+end;
+
+# 1-back
+array<int> is_target_1[stimulus_count];
+loop int i = 1 until i > stimulus_count / 3 begin
+   is_target_1[i] = 1;
+   i = i + 1
+end;
+is_target_1.shuffle();
+loop until is_target_1[1] == 0 begin
+   is_target_1.shuffle()
+end;
+
+# 2-back
+array<int> is_target_2[stimulus_count];
+loop int i = 1 until i > stimulus_count / 3 begin
+   is_target_2[i] = 1;
+   i = i + 1
+end;
+is_target_2.shuffle();
+loop until is_target_2[1] == 0 && is_target_2[2] == 0 begin
+   is_target_2.shuffle()
+end;
+
+# 3-back
+array<int> is_target_3[stimulus_count];
+loop int i = 1 until i > stimulus_count / 3 begin
+   is_target_3[i] = 1;
+   i = i + 1
+end;
+is_target_3.shuffle();
+loop until is_target_3[1] == 0 && is_target_3[2] == 0 && is_target_3[3] == 0 begin
+   is_target_3.shuffle()
+end;
+
+############   Subroutines for presentation ###########
+
+# 0-back
+sub 
+	n_back_0_Block
+begin
+	
+
+	loop
+		int i = 1;
+		int last = 0;
+		
+		int chosen_number = random (1, 9);
+		int stored_number = chosen_number;
+		
+		BeginBlock0_Back_Second.set_caption(string(stored_number));
+		BeginBlock0_Back_Second.redraw();
+
+		num_correct = 0;
+		#num_incorrect = 40;
+
+		Block0.present();
+	
+		#term.print("myword" + string(chosen_number)); 
+		
+	until
+		i > stimulus_count
+	begin
+		int index;
+		string target_string = ",No";
+		if (is_target_0[i] == 1) then
+			index = stored_number;
+			target_string = ",Yes";
+			n_back_0_pic_target.set_part( 1, numbers[index] );
+			n_back_0_event_target.set_event_code ( " T 20," + numbers[index].description() + target_string );
+			n_back_0_trial_target.present();
+		else
+			index = random_exclude( 1, numbers.count(), stored_number );
+			n_back_0_pic_normal.set_part( 1, numbers[index] );
+			n_back_0_event_normal.set_event_code ( " T 10," + numbers[index].description() + target_string );
+			n_back_0_trial_normal.present();
+		end;
+		
+		last = index;
+		
+		# Count up correct and incorrect
+		
+		int type = stimulus_manager.last_stimulus_data().type();		
+		if (type == stimulus_hit) then
+				num_correct = num_correct + 1
+		#elseif (type == stimulus_false_alarm) then
+		#		num_incorrect = num_incorrect - 1
+		end;
+		
+		# Check to see if "Stop" mouse button was pressed      
+      if (response_manager.last_response() == 3) then
+          # If so then show pause trial and wait for the "Go" mouse button
+          loop until (response_manager.last_response() == 4) begin
+            PauseTrial.present();
+          end; 
+          ResumeTrial.present();
+      end;
+		i = i + 1
+	end;
+	# store the percent correct in the text
+	PercentCorrect.set_caption(string(((num_correct) * 100) / stimulus_count));
+	PercentCorrect.redraw();
+
+end;
+
+# 1-back
+sub 
+	n_back_1_Block
+begin
+
+	num_correct = 0;
+	#num_incorrect = 40;
+
+	Block1.present();
+
+	loop
+		int i = 1;
+		int last = 0;
+	until
+		i > stimulus_count
+	begin
+		int index;
+		string target_string = ",No";
+		if (is_target_1[i] == 1) then
+			index = last;
+			target_string = ",Yes";
+			n_back_1_pic_target.set_part( 1, numbers[index] );
+			n_back_1_event_target.set_event_code ( " T 21," + numbers[index].description() + target_string );
+			n_back_1_trial_target.present();
+		else
+			index = random_exclude( 1, numbers.count(), last );
+			n_back_1_pic_normal.set_part( 1, numbers[index] );
+			n_back_1_event_normal.set_event_code ( " T 11," + numbers[index].description() + target_string );
+			n_back_1_trial_normal.present();
+		end;
+		
+		last = index;
+		
+		# Count up correct and incorrect
+		
+		int type = stimulus_manager.last_stimulus_data().type();		
+		if (type == stimulus_hit) then
+				num_correct = num_correct + 1
+		#elseif (type == stimulus_false_alarm) then
+		#		num_incorrect = num_incorrect - 1
+		end;
+		
+		# Check to see if "Stop" mouse button was pressed      
+      if (response_manager.last_response() == 3) then
+          # If so then show pause trial and wait for the "Go" mouse button
+          loop until (response_manager.last_response() == 4) begin
+            PauseTrial.present();
+          end; 
+          ResumeTrial.present();
+      end;
+		i = i + 1
+	end;
+	# store the percent correct in the text
+	PercentCorrect.set_caption(string(((num_correct) * 100) / stimulus_count));
+	PercentCorrect.redraw();
+
+end;
+
+
+# 2-back
+sub 
+	n_back_2_Block
+begin
+
+	num_correct = 0;
+	#num_incorrect = 40;
+	
+	Block2.present();
+
+	loop
+		int i = 1;
+		int last = 0;
+		int two_back = 0;
+	until
+		i > stimulus_count
+	begin
+		int index;
+		string target_string = ",No";
+		if (is_target_2[i] == 1) then
+			index = two_back;
+			target_string = ",Yes";
+			n_back_2_pic_target.set_part( 1, numbers[index] );
+			n_back_2_event_target.set_event_code ( " T 22," + numbers[index].description() + target_string );
+			n_back_2_trial_target.present();
+		else
+			index = random_exclude( 1, numbers.count(), two_back );
+			n_back_2_pic_normal.set_part( 1, numbers[index] );
+			n_back_2_event_normal.set_event_code ( " T 12," + numbers[index].description() + target_string );
+			n_back_2_trial_normal.present();
+		end;
+		
+		two_back = last;
+		last = index;
+		
+		# Count up correct and incorrect
+		
+		int type = stimulus_manager.last_stimulus_data().type();		
+		if (type == stimulus_hit) then
+				num_correct = num_correct + 1
+		#elseif (type == stimulus_false_alarm) then
+		#		num_incorrect = num_incorrect - 1
+		end;
+		
+		# Check to see if "Stop" mouse button was pressed      
+      if (response_manager.last_response() == 3) then
+          # If so then show pause trial and wait for the "Go" mouse button
+          loop until (response_manager.last_response() == 4) begin
+            PauseTrial.present();
+          end; 
+          ResumeTrial.present();
+      end;
+		i = i + 1
+	end;
+	
+	# store the percent correct in the text
+	PercentCorrect.set_caption(string(((num_correct) * 100) / stimulus_count));
+	PercentCorrect.redraw();
+
+end;
+
+# 3-back
+sub
+ 	n_back_3_Block
+begin
+
+	num_correct = 0;
+	#num_incorrect = 40;
+
+	Block3.present();
+
+	loop
+		int i = 1;
+		int last = 0;
+		int three_back = 0;
+	until
+		i > stimulus_count
+	begin
+		int index;
+		string target_string = ",No";
+		if (is_target_3[i] == 1) then
+			index = three_back;
+			target_string = ",Yes";
+			n_back_3_pic_target.set_part( 1, numbers[index] );
+			n_back_3_event_target.set_event_code ( " T 23," + numbers[index].description() + target_string );
+			n_back_3_trial_target.present();
+		else
+			index = random_exclude( 1, numbers.count(), three_back );
+			n_back_3_pic_normal.set_part( 1, numbers[index] );
+			n_back_3_event_normal.set_event_code ( " T 13," + numbers[index].description() + target_string );
+			n_back_3_trial_normal.present();
+		end;
+		
+		three_back = last;
+		last = index;
+		
+		# Count up correct and incorrect
+		
+		int type = stimulus_manager.last_stimulus_data().type();		
+		if (type == stimulus_hit) then
+				num_correct = num_correct + 1
+		#elseif (type == stimulus_false_alarm) then
+		#		num_incorrect = num_incorrect - 1
+		end;
+		
+		# Check to see if "Stop" mouse button was pressed      
+      if (response_manager.last_response() == 3) then
+          # If so then show pause trial and wait for the "Go" mouse button
+          loop until (response_manager.last_response() == 4) begin
+            PauseTrial.present();
+          end; 
+          ResumeTrial.present();
+      end;
+		i = i + 1
+	end;
+	
+	# store the percent correct in the text
+	PercentCorrect.set_caption(string(((num_correct) * 100) / stimulus_count));
+	PercentCorrect.redraw();
+
+end;
+
+########################################################################################
+
+# Explanation Screen
+Intro1.present();
+
+# Experiment intro
+#loop until (response_manager.last_response() == 3) begin
+  Intro2.present();
+#end;
+ResumeTrial.present();
+
+#### Setting up 12 blocks of experiments and randomising ###
+array<int> experiment[number_repetitions * number_block_type];
+loop 
+	int i = 1; 
+	int count = 1;
+until 
+	i > number_repetitions
+begin
+	loop 
+		int j = 1 
+	until 
+		j > number_block_type
+		begin
+			experiment[count] = j;
+			count = count + 1;
+			j = j + 1;
+		end;
+		i = i + 1;
+end;
+
+experiment.shuffle();
+
+#term.print("one" + string(experiment[1]) + "\n"); 
+#term.print("two" + string(experiment[2]) + "\n");
+#term.print("three" + string(experiment[3]) + "\n");
+#term.print("four" + string(experiment[4]) + "\n");
+#term.print("five" + string(experiment[5]) + "\n");
+#term.print("six" + string(experiment[6]) + "\n");
+#term.print("seven" + string(experiment[7]) + "\n");
+#term.print("eight" + string(experiment[8]) + "\n");
+#term.print("nine" + string(experiment[9]) + "\n");
+#term.print("ten" + string(experiment[10]) + "\n");
+#term.print("eleven" + string(experiment[11]) + "\n");
+#term.print("twelve" + string(experiment[12]) + "\n");
+
+##################### Presenting Experiments ######################
+
+loop
+	int block_num = 1;
+until
+	block_num > experiment.count()
+begin
+	if experiment[block_num] == 1 then
+		n_back_0_Block();
+		
+	# store the block number in the text
+
+		BlockNumber.set_caption(string(block_num));
+		BlockNumber.redraw();
+
+	# show the end of block trial
+
+		#loop until (response_manager.last_response() == 3) begin
+			EndTrial.present();
+		#end;  
+                
+		#ResumeTrial.present()
+	
+	elseif experiment[block_num] == 2 then
+		n_back_1_Block();
+		
+	# store the block number in the text
+
+		BlockNumber.set_caption(string(block_num));
+		BlockNumber.redraw();
+
+	# show the end of block trial
+
+		#loop until (response_manager.last_response() == 3) begin
+			EndTrial.present();
+		#end;  
+                
+		#ResumeTrial.present()
+	
+	elseif experiment[block_num] == 3 then
+		n_back_2_Block();
+		
+	# store the block number in the text
+
+		BlockNumber.set_caption(string(block_num));
+		BlockNumber.redraw();
+
+	# show the end of block trial
+
+		#loop until (response_manager.last_response() == 3) begin
+			EndTrial.present();
+		#end;  
+                
+		#ResumeTrial.present()
+	
+	elseif experiment[block_num] == 4 then
+		n_back_3_Block();
+		
+	# store the block number in the text
+
+		BlockNumber.set_caption(string(block_num));
+		BlockNumber.redraw();
+
+	# show the end of block trial
+
+		#loop until (response_manager.last_response() == 3) begin
+			EndTrial.present();
+		#end;  
+                
+		#ResumeTrial.present()	
+	end;
+	
+block_num = block_num + 1;
+
+end;
