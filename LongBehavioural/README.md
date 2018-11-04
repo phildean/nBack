@@ -14,6 +14,19 @@ Participants are asked to press the target button when the number on screen matc
 two previous (2-Back), or three previous (3-Back). For every other number that did not match, participants are asked to press the non-target button. 
 In the fourth condition (0-Back) a random number between 1 and 9 is designated as a target at the beginning of the block._
 
+Can be used with EEG, and sends parallel port codes:
+
+0-Back Target       20 
+0-Back Non-Target   10
+1-Back Target       21
+1-Back Non-Target   11
+2-Back Target       22
+2-Back Non-Target   12
+3-Back Target       23
+3-Back Non-Target   13
+Pause               50
+End Of Block        60
+
 Used in:
 Dean PJA, Sterr AM (2013) Long-term effects of mild traumatic brain injury on cognitive performance, 
 Frontiers in Human Neuroscience 7 30 pp. 1-11 Frontiers Research Foundation
