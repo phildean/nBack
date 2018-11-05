@@ -1,0 +1,14 @@
+trial{
+   trial_duration = 6000;
+
+   picture {
+         text $stext; 
+         x = 0; y = 300;
+
+   };
+   deltat = 0;
+	mri_pulse = $pulse_no;
+	duration = 5900;
+   code = $scode; 
+   
+}$IntroName;
