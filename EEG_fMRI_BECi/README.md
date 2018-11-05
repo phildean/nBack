@@ -4,6 +4,8 @@
 
 Fixed semi-randomised order of presentation of blocks. 
 
+Target Button is 1. To change - change target button in trial and trial_nontarget .tem files. 
+
 Stimuli are single digit numbers: [1 2 3 4 5 6 7 8 9]
 
 ISI = 3s, Stimulus: 500ms
