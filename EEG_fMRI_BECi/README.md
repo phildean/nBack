@@ -17,15 +17,13 @@ Sends parallel port codes:
 	4-Back Target       24
 	4-Back Non-Target   14
 	Begin Block 0-Back  51
-  Begin Block 2-Back  53
-  Begin Block 4-Back  54
-  End Block 0-Back    60
-  End Block 2-Back    63
-  End Block 4-Back    64
-  Begin Block Rest    50
-  End Block Rest      61
-  Pause               50
-	End Of Block        60
+	Begin Block 2-Back  53
+	Begin Block 4-Back  54
+	End Block 0-Back    60
+	End Block 2-Back    63
+	End Block 4-Back    64
+	Begin Block Rest    50
+	End Block Rest      61
 
 
 Used in: Brain Effects of Creatine (BECi) study
